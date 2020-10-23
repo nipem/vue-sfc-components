@@ -1,6 +1,6 @@
 # business-component
 
-基于公司的基础组件 [@femessage/element-ui](https://github.com/FEMessage/element) 开发业务组件
+基于基础组件 [@femessage/element-ui](https://github.com/FEMessage/element) 二次开发业务组件
 
 ## 功能
 
