@@ -1,4 +1,4 @@
-import vue from './rollup-plugin-vue/rollup-plugin-vue.esm'
+import vue from 'rollup-plugin-vue'
 import pkg from './package.json'
 import css from 'rollup-plugin-css-only'
 import url from '@rollup/plugin-url'
