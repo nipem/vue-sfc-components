@@ -1,20 +1,38 @@
-import vue from './rollup-plugin-vue/rollup-plugin-vue.esm';
-import pkg from './package.json';
-import css from 'rollup-plugin-css-only';
-import url from '@rollup/plugin-url';
-import image from '@rollup/plugin-image';
+import vue from './rollup-plugin-vue/rollup-plugin-vue.esm'
+import pkg from './package.json'
+import css from 'rollup-plugin-css-only'
+import url from '@rollup/plugin-url'
+import image from '@rollup/plugin-image'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 
 const input = 'src/components/index.js'
-const wrapperInput = 'src/components/wrapper.js'
-const iifeName = 'bussinessComponent'
 const plugins = [resolve(), commonjs(), url(), css(), image()]
+
+const esm = {
+  input,
+  output: {
+    format: 'es',
+    file: pkg.module,
+  },
+  external,
+  plugins: [...plugins, vue()],
+}
+
+const ssr = {
+  input,
+  output: {
+    format: 'cjs',
+    file: pkg.main,
+  },
+  external,
+  plugins: [...plugins, vue({ template: { optimizeSSR: true } })],
+}
 
 function generageConfig(config) {
   const minConfig = {
-    ...config
+    ...config,
   }
 
   minConfig.output = {
@@ -28,36 +46,12 @@ function generageConfig(config) {
   return [config, minConfig]
 }
 
-const esm = {
-  input,
-  output: {
-    format: 'es',
-    file: pkg.module,
-  },
-  plugins: [...plugins, vue()],
+function external(id) {
+  return (
+    id in pkg.dependencies ||
+    id in pkg.peerDependencies ||
+    ['path'].includes(id)
+  )
 }
 
-const ssr = {
-  input,
-  output: {
-    format: 'cjs',
-    file: pkg.main,
-  },
-  plugins: [...plugins, vue({ template: { optimizeSSR: true } })],
-}
-
-const browser = {
-  input: wrapperInput,
-  output: {
-    format: 'iife',
-    file: `dist/${pkg.name}.browser.js`,
-    name: iifeName,
-  },
-  plugins: [...plugins, vue()],
-}
-
-export default [
-  ...generageConfig(esm),
-  ...generageConfig(ssr),
-  ...generageConfig(browser),
-]
+export default [...generageConfig(esm), ...generageConfig(ssr)]

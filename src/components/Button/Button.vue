@@ -1,5 +1,7 @@
 <template>
-  <button type="button" :class="classes" @click="onClick" :style="style">{{ label }}</button>
+  <button type="button" :class="classes" @click="onClick" :style="style">
+    {{ label }}
+  </button>
 </template>
 
 <script>
@@ -26,7 +28,7 @@ export default {
       type: String,
       required: true,
     },
-     /**
+    /**
      * Model example
      */
     primary: {
@@ -40,8 +42,8 @@ export default {
     size: {
       type: String,
       default: 'medium',
-      validator: function (value) {
-        return ['small', 'medium', 'large'].indexOf(value) !== -1;
+      validator: function(value) {
+        return ['small', 'medium', 'large'].indexOf(value) !== -1
       },
     },
     /**
@@ -60,12 +62,12 @@ export default {
         'storybook-button--primary': this.primary,
         'storybook-button--secondary': !this.primary,
         [`storybook-button--${this.size}`]: true,
-      };
+      }
     },
     style() {
       return {
         backgroundColor: this.backgroundColor,
-      };
+      }
     },
   },
 
@@ -80,10 +82,10 @@ export default {
      * @returns {string} Test
      */
     onClick() {
-      this.$emit('onClick');
+      this.$emit('onClick')
     },
   },
-};
+}
 </script>
 
 <style>

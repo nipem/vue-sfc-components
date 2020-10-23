@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
-import {
-  Header,
-} from '@/components'
+import { Header, TableCheckbox } from '@/components'
 
-Vue.config.productionTip = true
+Vue.config.productionTip = false
 
-Vue.use(Header)
-// Vue.use(Page)
+Vue.component(Header.name, Header)
+Vue.component(TableCheckbox.name, TableCheckbox)
 
 new Vue({
   render: h => h(App),
