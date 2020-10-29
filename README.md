@@ -39,10 +39,10 @@ Vue.component(TableCheckbox.name, TableCheckbox)
 ## 组件开发
 
 1. 新建与组件同名的文件夹 `src/components/componentName`。
-2. 新建文件 `src/components/componentName/componentName.vue`。[编写组件](./how-to-write-component.md)。
-3. 新建文件 `src/components/componentName/componentName.story.js`。[编写 story ](./how-to-write-story.md)。
+2. 新建文件 `src/components/componentName/componentName.vue`。[编写组件](./docs/how-to-write-component.md)。
+3. 新建文件 `src/components/componentName/componentName.story.js`。[编写 story ](./docs/how-to-write-story.md)。
 4. 修改 `src/components/index.js`，导出组件。
-5. 新建文件 `test/unit/componentName.spec.js`。[编写测试](./how-to-write-test.md)。
+5. 新建文件 `test/unit/componentName.spec.js`。[编写测试](./docs/how-to-write-test.md)。
 
 ## Commands
 
