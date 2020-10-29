@@ -1,6 +1,4 @@
-import Button from './Button/Button.vue'
-import Header from './Header/Header.vue'
-import Page from './Page/Page.vue'
 import TableCheckbox from './TableCheckbox/TableCheckbox.vue'
+import StatisticCard from './StatisticCard/StatisticCard.vue'
 
-export { Button, Header, Page, TableCheckbox }
+export { TableCheckbox, StatisticCard }

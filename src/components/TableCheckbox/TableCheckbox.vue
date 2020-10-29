@@ -32,6 +32,29 @@
 
 <script>
 import { Table, TableColumn, Checkbox } from '@femessage/element-ui'
+/**
+ * 深拷贝 vue 对象
+ */
+function deepClone(row, data = {}) {
+  return {
+    ...JSON.parse(JSON.stringify(row)),
+    ...data,
+  }
+}
+
+/**
+ * 设置 colHeads 的 prop 值为 selected，返回新的对象
+ *
+ * @param colHeads Object 表头数组，包含 prop 和 name 属性
+ * @param selected Boolean 是否选中
+ * @return Object
+ */
+function generateRow(colHeads, selected) {
+  return colHeads.reduce((acc, colHead) => {
+    acc[colHead.prop] = selected
+    return acc
+  }, {})
+}
 
 export default {
   name: 'TableCheckbox',
@@ -41,19 +64,34 @@ export default {
     [Checkbox.name]: Checkbox,
   },
   props: {
+    /**
+     * 表头名称
+     */
     head: {
       type: String,
-      default: '表头',
+      default: '-',
     },
+    /**
+     * 可设置权限类型
+     *
+     * 数组每项都包含 name 和 prop 属性
+     */
     colHeads: {
       type: Array,
+      required: true,
       default: () => [],
       validator(items) {
         return items.every(item => item.name && item.prop)
       },
     },
+    /**
+     * 菜单权限列表
+     *
+     * 数组每项都包含 name 和 selected 属性。同时需要包含 `colHeads` 每项中的 prop 属性，值为 boolean
+     */
     tableData: {
       type: Array,
+      required: true,
       default: () => [],
       validator(items) {
         return items.every(
@@ -75,43 +113,30 @@ export default {
       this.updateHeader(isAllChecked)
     },
   },
-  created() {},
   methods: {
     toggleCheckbox(row, index) {
+      // check if is all checked
       let isAllChecked = true
+      const rightPropMap = generateRow(this.colHeads, true)
+
       for (let key in row) {
-        const isRight = ['name', 'selected'].indexOf(key) === -1
-        const checked = row[key]
-        if (isRight && !checked) {
+        if (rightPropMap[key] && !row[key]) {
           isAllChecked = false
           break
         }
       }
 
-      const newRow = this.colHeads.reduce(
-        (acc, colHead) => {
-          acc[colHead.prop] = row[colHead.prop]
-          return acc
-        },
-        {
-          name: row.name,
-          selected: isAllChecked,
-        }
-      )
+      const newRow = deepClone(row, {
+        selected: isAllChecked,
+      })
 
       this.$set(this.tableData, index, newRow)
     },
     toggleSelectRow(row, index) {
-      const newRow = this.colHeads.reduce(
-        (acc, colHead) => {
-          acc[colHead.prop] = row.selected
-          return acc
-        },
-        {
-          name: row.name,
-          selected: row.selected,
-        }
-      )
+      const newRow = deepClone(row, {
+        ...generateRow(this.colHeads, row.selected),
+        selected: row.selected,
+      })
 
       this.$set(this.tableData, index, newRow)
     },
@@ -120,21 +145,21 @@ export default {
 
       if (this.$refs.table && this.$refs.table.$refs.tableHeader) {
         this.$refs.table.$refs.tableHeader.$forceUpdate()
+        /**
+         * 点选任何 checkbox 都会触发。会返回更新后的 `tableData` 对象
+         *
+         * @event select
+         * @type {object}
+         */
         this.$emit('select', this.tableData)
       }
     },
     toggleSelectAll(selectedAll) {
       this.tableData.forEach((row, index) => {
-        const newRow = this.colHeads.reduce(
-          (acc, colHead) => {
-            acc[colHead.prop] = selectedAll
-            return acc
-          },
-          {
-            name: row.name,
-            selected: selectedAll,
-          }
-        )
+        const newRow = deepClone(row, {
+          ...generateRow(this.colHeads, selectedAll),
+          selected: selectedAll,
+        })
 
         this.$set(this.tableData, index, newRow)
       })

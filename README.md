@@ -8,31 +8,41 @@
 - [x] 支持 ssr
 - [x] 支持 esm 按需加载
 - [x] 易写文档。在组件内编写相应注释，即可生成清晰的文档
+- [x] storybook 支持 less、eslint（autofix）
 
 ## 安装及使用
 
 **安装**
 
 ```sh
+# 依赖基础组件库 @femessage/element-ui
 yarn add --save-dev @femessage/element-ui business-component
 ```
 
-**按需使用**
+**按需加载**
 
 ```js
 import Vue from 'vue'
 import { Header, TableCheckbox } from '@/components'
 
-Vue.component(Header.name, Header)
+// import base component. which business component is dependent on
+Vue.component(Table.name, Table)
+Vue.component(TableColumn.name, TableColumn)
+Vue.component(Checkbox.name, Checkbox)
+Vue.component(Icon.name, Icon)
+
+// import business component
+Vue.component(StatisticCard.name, StatisticCard)
 Vue.component(TableCheckbox.name, TableCheckbox)
 ```
 
 ## 组件开发
 
-1. 在 `src/components` 目录下创建组件文件夹，使用大写驼峰命名文件（比如：`MyComponent`）。
-2. 创建和开发业务组件（`MyComponent.vue`）。
-3. 创建 storybook 文档文件（`MyComponent.stories.js`），编写组件文档及示例。
-4. 在 `tests` 目录下，创建单元测试文件（`MyComponent.spec.js`），编写测试用例。
+1. 新建与组件同名的文件夹 `src/components/componentName`。
+2. 新建文件 `src/components/componentName/componentName.vue`。[编写组件](./how-to-write-component.md)。
+3. 新建文件 `src/components/componentName/componentName.story.js`。[编写 story ](./how-to-write-story.md)。
+4. 修改 `src/components/index.js`，导出组件。
+5. 新建文件 `test/unit/componentName.spec.js`。[编写测试](./how-to-write-test.md)。
 
 ## Commands
 
@@ -55,7 +65,9 @@ yarn test:unit
 
 ## 开发依赖
 
-- [rollup]() 支持 esm 打包方式的打包工具。
-- [rollup-plugin-vue]() rollup vue 插件。打包 .vue 文件。
-- [@vue/test-utils]() vue 测试框架。
-- [storybook]() 组件文档工具
+- [rollup](https://rollupjs.org/guide/en/) 支持 esm 打包方式的打包工具。
+- [rollup-plugin-vue](https://github.com/vuejs/rollup-plugin-vue) rollup vue 插件。打包 .vue 文件。
+- [@vue/test-utils](https://vue-test-utils.vuejs.org/zh/) vue 测试框架。
+- [storybook](https://storybook.js.org/) 最受欢迎的组件浏览器
+  - [Doc Blocks](https://storybook.js.org/docs/vue/writing-docs/doc-blocks) 如何编写文档
+  - [list of available controls](https://storybook.js.org/docs/vue/essentials/controls#annotation)

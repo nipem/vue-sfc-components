@@ -1,31 +1,16 @@
-<template>
-  <div id="app">
-    <div class="container mx-auto">
-      <div class="mx-auto my-5">
-        <h2>StatisticCard</h2>
-        <StatisticCard
-          class="w-64 bg-blue-100 p-3 rounded"
-          :inline="inline"
-          :num="num"
-          :name="name"
-          :rates="rates"
-        ></StatisticCard>
-      </div>
+import TableCheckbox from './TableCheckbox'
+import { action } from '@storybook/addon-actions'
 
-      <div class="w-8/12 mx-auto">
-        <h2>TableCheckbox</h2>
-        <TableCheckbox
-          :head="head"
-          :colHeads="colHeads"
-          :tableData="tableData"
-          @select="onSelect"
-        />
-      </div>
-    </div>
-  </div>
-</template>
-
-<script>
+export default {
+  title: 'Components/TableCheckbox',
+  component: TableCheckbox,
+  decorators: [
+    () => ({
+      template: '<div class="w-6/12 mx-auto"><story/></div>',
+    }),
+  ],
+}
+const templateCode = `<TableCheckbox v-bind="$props" @select="select" />`
 const policies = [
   {
     name: '创建',
@@ -83,33 +68,30 @@ const tableDataDefault = () =>
     }, {}),
   }))
 
-export default {
-  name: 'App',
-  data() {
-    return {
-      inline: true,
-      num: 123456,
-      name: '新增数量',
-      rates: [
-        {
-          name: '同比',
-          rate: 0.57,
-        },
-        {
-          name: '环比',
-          rate: -0.46,
-        },
-      ],
+const Template = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { TableCheckbox },
+  template: templateCode,
+})
 
-      head: '权限内容',
-      colHeads: policies,
-      tableData: tableDataDefault(),
-    }
-  },
-  methods: {
-    onSelect(data) {
-      console.log(data)
+export const main = Template.bind({})
+
+main.parameters = {
+  docs: {
+    description: {
+      component: '菜单列表权限管理',
+    },
+    source: {
+      code: templateCode,
     },
   },
 }
-</script>
+
+main.args = {
+  head: '权限内容',
+  colHeads: policies,
+  tableData: tableDataDefault(),
+  select(...args) {
+    action('select')(args)
+  },
+}
