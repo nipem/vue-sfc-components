@@ -15,8 +15,7 @@
 **安装**
 
 ```sh
-# 依赖基础组件库 @femessage/element-ui
-yarn add --save-dev @femessage/element-ui business-component
+yarn add --save-dev business-component
 ```
 
 **按需加载**
